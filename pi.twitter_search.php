@@ -24,7 +24,7 @@
 
 $plugin_info = array(
 	'pi_name'			=> 'Twitter Search 2',
-	'pi_version'		=> '2.0',
+	'pi_version'		=> '2.0.1',
 	'pi_author'			=> 'Crescendo Multimedia',
 	'pi_author_url'		=> 'http://www.crescendo.net.nz/',
 	'pi_description'	=> 'Find tweets based on search text or location',
@@ -39,6 +39,13 @@ class Twitter_search
 	function Twitter_search()
 	{
 		$this->EE =& get_instance();
+		
+		// detect cURL library
+		if (!function_exists('curl_init'))
+		{
+			$this->return_data = 'The cURL library must be installed and enabled to use Twitter Search!';
+			return;
+		}
 		
 		if (trim($this->EE->TMPL->tagdata) == '') { return; }
 		
