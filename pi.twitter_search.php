@@ -24,7 +24,7 @@
 
 $plugin_info = array(
 	'pi_name'			=> 'Twitter Search 2',
-	'pi_version'		=> '2.0.1',
+	'pi_version'		=> '2.0.2',
 	'pi_author'			=> 'Crescendo Multimedia',
 	'pi_author_url'		=> 'http://www.crescendo.net.nz/',
 	'pi_description'	=> 'Find tweets based on search text or location',
@@ -91,6 +91,12 @@ class Twitter_search
 			
 			// run tweet text through typography class
 			$tweets[$i]['text'] = $this->EE->typography->parse_type($tweet_data->text);
+			
+			// do we need to nofollow links?
+			if ($this->EE->typography->auto_links AND $this->EE->TMPL->fetch_param('nofollow') != "no")
+			{
+				$tweets[$i]['text'] = str_ireplace('<a href="', '<a rel="nofollow" href="', $tweets[$i]['text']);
+			}
 			
 			// php datestamps
 			$tweets[$i]['created_at'] = strtotime($tweet_data->created_at);
@@ -185,6 +191,7 @@ Optional Parameters
 * geocode="latitude,longitude,radius" returns tweets by users located within a given radius of the location
 * cache="yes" refresh="5" cache tags output
 * auto_links="yes" converts url's in the {text} into links
+* nofollow="no" sorry about the double negative - this disables rel="nofollow" on auto_links
 * word_censor="no" turns off the EE word censor
 * for advanced parameters, see http://dev.twitter.com/doc/get/search
 
