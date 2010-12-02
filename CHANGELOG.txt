@@ -1,0 +1,30 @@
+/*
+ * Twitter Search 2 module by Crescendo (support@crescendo.net.nz)
+ * Concept based on Twitter Search for EE 1.6 by David Rencher (http://www.lumis.com/)
+ * 
+ * Copyright (c) 2010 Crescendo Multimedia Ltd
+ * All rights reserved.
+ * 
+ * This software is licensed under a Creative Commons Attribution-ShareAlike 3.0 License.
+ * http://creativecommons.org/licenses/by-sa/3.0/
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+VERSION 2.0.2
+	* Added rel="nofollow" to links by default, this can be configured in the tag
+
+VERSION 2.0.1
+	* Added check for cURL library, and an error message on the template if it is not found
+
+VERSION 2.0
+	* Initial release
