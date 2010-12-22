@@ -20,6 +20,9 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+VERSION 2.0.3
+	* Removed HTML encoding from {source} so that it may be used directly in templates
+
 VERSION 2.0.2
 	* Added rel="nofollow" to links by default, this can be configured in the tag
 

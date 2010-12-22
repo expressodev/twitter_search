@@ -24,7 +24,7 @@
 
 $plugin_info = array(
 	'pi_name'			=> 'Twitter Search 2',
-	'pi_version'		=> '2.0.2',
+	'pi_version'		=> '2.0.3',
 	'pi_author'			=> 'Crescendo Multimedia',
 	'pi_author_url'		=> 'http://www.crescendo.net.nz/',
 	'pi_description'	=> 'Find tweets based on search text or location',
@@ -97,6 +97,9 @@ class Twitter_search
 			{
 				$tweets[$i]['text'] = str_ireplace('<a href="', '<a rel="nofollow" href="', $tweets[$i]['text']);
 			}
+			
+			// source is html encoded for some reason
+			$tweets[$i]['source'] = str_replace('&', '&amp;', htmlspecialchars_decode($tweets[$i]['source']));
 			
 			// php datestamps
 			$tweets[$i]['created_at'] = strtotime($tweet_data->created_at);
