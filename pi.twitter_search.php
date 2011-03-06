@@ -28,15 +28,15 @@ $plugin_info = array(
 	'pi_author'			=> 'Crescendo Multimedia',
 	'pi_author_url'		=> 'http://www.crescendo.net.nz/',
 	'pi_description'	=> 'Find tweets based on search text or location',
-	'pi_usage'			=> twitter_search::usage()
+	'pi_usage'			=> Twitter_search::usage()
 );
 
 class Twitter_search
 {
-	var $twitter_url = 'http://search.twitter.com/search.json?callback=';
-	var $return_data = '';
+	const TWITTER_URL = 'http://search.twitter.com/search.json?callback=';
+	public $return_data = '';
 	
-	function Twitter_search()
+	public function Twitter_search()
 	{
 		$this->EE =& get_instance();
 		
@@ -122,22 +122,22 @@ class Twitter_search
 		$this->return_data = $this->EE->TMPL->parse_variables($this->EE->TMPL->tagdata, $tweets);
 	}
 	
-	function query_twitter($tagparams)
+	private function query_twitter($tagparams)
 	{
-		$query_url = $this->twitter_url;
+		$query_url = self::TWITTER_URL;
 		$skip_vars = array('cache', 'refresh', 'word_censor', 'auto_links');
 		
 		// generate query string
 		foreach ($tagparams as $key => $value)
 		{
-			if (!in_array($key, $skip_vars))
+			if ( ! in_array($key, $skip_vars))
 			{
 				$query_url .= "&".$key."=".urlencode($value);
 			}
 		}
 		
 		// request data from twitter
-		if (!extension_loaded('curl') OR !function_exists('curl_init'))
+		if ( ! extension_loaded('curl') OR ! function_exists('curl_init'))
 		{
 			return "cURL library not found!";
 		}
@@ -163,7 +163,7 @@ class Twitter_search
 		}
 	}
 	
-	function no_tweets($tagdata)
+	private function no_tweets($tagdata)
 	{
 		// based on no_results code in ./system/expressionengine/libraries/Template.php	
 		if (strpos($tagdata, 'if no_tweets') !== FALSE && preg_match("/".LD."if no_tweets".RD."(.*?)".LD.'\/'."if".RD."/s", $tagdata, $match)) 
@@ -182,58 +182,11 @@ class Twitter_search
 		}
 	}
 	
-	function usage()
+	public static function usage()
 	{
-		return <<<EOF
-{exp:twitter_search q="query"}
-
-Find tweets matching a specific query. Accepts pretty much anything, e.g.
-
-* q="food"
-* q="#ExpressionEngine"
-* q="@CrescendoNZ"
-* q="from:CrescendoNZ"
-* q="to:CrescendoNZ"
-
-Optional Parameters
-
-* lang="en" restricts tweets to the given language, given by an ISO 639-1 code
-* rpp="" the number of tweets to return, up to a max of 100
-* page="" the page number (starting at 1) to return, up to a max of roughly 1500 results
-* geocode="latitude,longitude,radius" returns tweets by users located within a given radius of the location
-* cache="yes" refresh="5" cache tags output
-* auto_links="yes" converts url's in the {text} into links
-* nofollow="no" sorry about the double negative - this disables rel="nofollow" on auto_links
-* word_censor="no" turns off the EE word censor
-* for advanced parameters, see http://dev.twitter.com/doc/get/search
-
-Tag Variables available
-
-* {text}
-* {to_user_id}
-* {from_user}
-* {id}
-* {from_user_id}
-* {iso_language_code}
-* {profile_image_url}
-* {source}
-* {created_at format="%D, %M %d %Y - %g:%i %a"}
-* {relative_date} - the relative date expressed in words, e.g. "3 hours, 10 minutes ago"
-* {if no_tweets} - conditional only, displayed if no results found
-
-Example Usage
-
-{exp:twitter_search q="food" geocode="-41.291285,174.775134,10km" rpp="5" lang="en" auto_links="yes" cache="yes" refresh="5"}
-<div class="tweet">
-	{text}<br />
-	{from_user} {relative_date}
-	{if no_tweets}Nothing to display!{/if}
-</div>
-{/exp:twitter_search}
-
-Concept based on Twitter Search for EE 1.6 by David Rencher (http://www.lumis.com/)
-Rewritten for ExpressionEngine 2.0 and PHP5 by Crescendo Multimedia (http://www.crescendo.net.nz/)
-EOF;
+		// for performance only load README if inside control panel
+		$EE =& get_instance();
+		return isset($EE->cp) ? file_get_contents(PATH_THIRD.'twitter_search/README.md') : '';
 	}
 }
 
