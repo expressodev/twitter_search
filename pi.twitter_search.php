@@ -41,7 +41,7 @@ class Twitter_search
 		$this->EE =& get_instance();
 		
 		// detect cURL library
-		if (!function_exists('curl_init'))
+		if ( ! function_exists('curl_init'))
 		{
 			$this->return_data = 'The cURL library must be installed and enabled to use Twitter Search!';
 			return;
@@ -53,18 +53,27 @@ class Twitter_search
 		if (empty($json_data))
 		{
 			// no twitter results
-			return $this->no_tweets($this->EE->TMPL->tagdata);
+			$this->return_data = $this->no_tweets($this->EE->TMPL->tagdata);
+			return;
 		}
 		elseif (is_string($json_data))
 		{
 			// probably a cURL error
-			return $json_data;
+			$this->return_data = $json_data;
+			return;
+		}
+		elseif ( ! empty($json_data->error))
+		{
+			// Twitter API returned error
+			$this->return_data = $json_data->error;
+			return;
 		}
 		
 		// check we found some tweets
 		if (count($json_data->results) == 0)
 		{
-			return $this->no_tweets($this->EE->TMPL->tagdata);
+			$this->return_data = $this->no_tweets($this->EE->TMPL->tagdata);
+			return;
 		}
 		
 		// configure typography library
