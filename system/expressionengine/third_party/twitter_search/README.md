@@ -16,8 +16,9 @@ Basic Queries
 Find tweets matching a specific query. Accepts pretty much anything, e.g.
 
 * `q="food"`
-* `q="#ExpressionEngine"`
+* `q="#winning"`
 * `q="@CrescendoNZ"`
+* `q="@CrescendoNZ #eecms"`
 * `q="from:CrescendoNZ"`
 * `q="to:CrescendoNZ"`
 
@@ -29,8 +30,8 @@ Optional Parameters
 * `page=""` - the page number (starting at 1) to return, up to a max of roughly 1500 results
 * `geocode="latitude,longitude,radius"` - returns tweets by users located within a given radius of the location
 * `cache="yes" refresh="5"` - standard ExpressionEngine tag output caching
-* `auto_links="yes"` - converts url's in the {text} into links
-* `nofollow="no"` - this disables rel="nofollow" on auto_links (apologies for the double negative!)
+* `auto_links="no"` - don't convert URLs in the {text} into links
+* `nofollow="no"` - this disables rel="nofollow" on links
 * `word_censor="no"` - turns off the EE word censor
 * for advanced parameters, see [http://dev.twitter.com/doc/get/search](http://dev.twitter.com/doc/get/search)
 
@@ -60,8 +61,16 @@ Example Usage
 	</div>
 	{/exp:twitter_search}
 
+Please note this plugin is limited to what the Twitter search API will let you query - usually
+only tweets from the last 5 days or so.
+
 Changelog
 ---------
+
+**2.0.4** *(2011-03-30)*
+
+* URLs are converted to links by default
+* @usernames and #hashtags are now converted to links
 
 **2.0.3** *(2010-12-23)*
 
