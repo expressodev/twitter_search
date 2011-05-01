@@ -24,7 +24,7 @@
 
 $plugin_info = array(
 	'pi_name'			=> 'Twitter Search 2',
-	'pi_version'		=> '2.0.4',
+	'pi_version'		=> '2.0.5',
 	'pi_author'			=> 'Crescendo Multimedia',
 	'pi_author_url'		=> 'http://www.crescendo.net.nz/',
 	'pi_description'	=> 'Find tweets based on search text or location',
@@ -89,42 +89,52 @@ class Twitter_search
 
 		// loop over tweets and build array for template
 		$tweets = array();
-		$i=0;
-		foreach($json_data->results as $tweet_data)
+		foreach($json_data->results as $result)
 		{
-			$tweets[$i] = (array)$tweet_data;
+			$tweet = array(
+				'id' => $result->id_str,
+				'from_user' => $result->from_user,
+				'from_user_id' => $result->from_user_id_str,
+				'to_user_id' => $result->to_user_id_str,
+				'geo' => $result->geo,
+				'profile_image_url' => $result->profile_image_url,
+				'iso_language_code' => $result->iso_language_code,
+			);
+
+			$tweet['tweet_url'] = "http://twitter.com/{$tweet['from_user']}/status/{$tweet['id']}";
 
 			// run tweet text through typography class
-			$tweets[$i]['text'] = $this->EE->typography->parse_type($tweet_data->text);
+			$tweet['text'] = $this->EE->typography->parse_type($result->text);
 
 			// parse @usernames and #hashtags
 			if ($this->EE->TMPL->fetch_param('auto_links') != "no")
 			{
-				if (strpos($tweets[$i]['text'], '@') !== FALSE)
+				if (strpos($tweet['text'], '@') !== FALSE)
 				{
-					$tweets[$i]['text'] = preg_replace('/(^|[^\w])@(\w+)/', '$1@<a href="http://twitter.com/$2">$2</a>', $tweets[$i]['text']);
+					$tweet['text'] = preg_replace('/(^|[^\w])@(\w+)/', '$1@<a href="http://twitter.com/$2">$2</a>', $tweet['text']);
 				}
-				if (strpos($tweets[$i]['text'], '#') !== FALSE)
+				if (strpos($tweet['text'], '#') !== FALSE)
 				{
-					$tweets[$i]['text'] = preg_replace('/(^|[^\w])#(\w+)/', '$1<a href="http://twitter.com/search/%23$2">#$2</a>', $tweets[$i]['text']);
+					$tweet['text'] = preg_replace('/(^|[^\w])#(\w+)/', '$1<a href="http://twitter.com/search/%23$2">#$2</a>', $tweet['text']);
 				}
 			}
 
 			// do we need to nofollow links?
 			if ($this->EE->typography->auto_links AND $this->EE->TMPL->fetch_param('nofollow') != "no")
 			{
-				$tweets[$i]['text'] = str_ireplace('<a href="', '<a rel="nofollow" href="', $tweets[$i]['text']);
+				$tweet['text'] = str_ireplace('<a href="', '<a rel="nofollow" href="', $tweet['text']);
 			}
 
 			// source is html encoded for some reason
-			$tweets[$i]['source'] = str_replace('&', '&amp;', htmlspecialchars_decode($tweets[$i]['source']));
+			$tweet['source'] = str_replace('&', '&amp;', htmlspecialchars_decode($result->source));
 
 			// php datestamps
-			$tweets[$i]['created_at'] = strtotime($tweet_data->created_at);
-			$tweets[$i]['relative_date'] = $this->EE->localize->format_timespan(time() - $tweets[$i]['created_at']);
+			$tweet['created_at'] = strtotime($result->created_at);
+			$tweet['relative_date'] = $this->EE->localize->format_timespan(time() - $tweet['created_at']);
 
-			$tweets[$i]['no_tweets'] = 0;
-			$i++;
+			$tweet['no_tweets'] = 0;
+
+			$tweets[] = $tweet;
 		}
 
 		// output template content

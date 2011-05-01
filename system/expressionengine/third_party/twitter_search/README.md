@@ -45,10 +45,11 @@ Tag Variables available
 * `{from_user_id}`
 * `{iso_language_code}`
 * `{profile_image_url}`
-* `{source}`
+* `{tweet_url}` - a permanent link to this tweet
+* `{source}` - an html link to the Twitter client used to post this tweet
 * `{created_at format="%D, %M %d %Y - %g:%i %a"}`
 * `{relative_date}` - the relative date expressed in words, e.g. "3 hours, 10 minutes ago"
-* `{if no_tweets}` - conditional only, displayed if no results found
+* `{if no_tweets}{/if}` - conditional variable, content displayed if no tweets are found
 
 Example Usage
 -------------
@@ -56,7 +57,7 @@ Example Usage
 	{exp:twitter_search q="food" geocode="-41.291285,174.775134,10km" rpp="5" lang="en" auto_links="yes" cache="yes" refresh="5"}
 	<div class="tweet">
 		{text}<br />
-		{from_user} {relative_date}
+		{from_user} <a href="{tweet_url}">{relative_date}</a>
 		{if no_tweets}Nothing to display!{/if}
 	</div>
 	{/exp:twitter_search}
@@ -66,6 +67,11 @@ only tweets from the last 5 days or so.
 
 Changelog
 ---------
+
+**2.0.5** *(2011-05-01)*
+
+* Fixed issue displaying {id} variable
+* Added {tweet_url} variable
 
 **2.0.4** *(2011-03-30)*
 
