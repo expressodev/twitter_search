@@ -47,9 +47,14 @@ Tag Variables available
 * `{profile_image_url}`
 * `{tweet_url}` - a permanent link to this tweet
 * `{source}` - an html link to the Twitter client used to post this tweet
-* `{created_at format="%D, %M %d %Y - %g:%i %a"}`
-* `{relative_date}` - the relative date expressed in words, e.g. "3 hours, 10 minutes ago"
+* `{tweet_date format="%D, %M %d %Y - %g:%i %a"}`
+* `{relative_tweet_date}` - the relative date expressed in words, e.g. "3 hours, 10 minutes ago"
 * `{if no_tweets}{/if}` - conditional variable, content displayed if no tweets are found
+
+Legacy variables, still available:
+
+* `{created_at}`
+* `{relative_date}`
 
 Example Usage
 -------------
@@ -57,7 +62,7 @@ Example Usage
 	{exp:twitter_search q="food" geocode="-41.291285,174.775134,10km" rpp="5" lang="en" auto_links="yes" cache="yes" refresh="5"}
 	<div class="tweet">
 		{text}<br />
-		{from_user} <a href="{tweet_url}">{relative_date}</a>
+		{from_user} <a href="{tweet_url}">{relative_tweet_date}</a>
 		{if no_tweets}Nothing to display!{/if}
 	</div>
 	{/exp:twitter_search}
@@ -67,6 +72,10 @@ only tweets from the last 5 days or so.
 
 Changelog
 ---------
+
+**2.0.6** *(2011-07-23)*
+
+* Renamed tweet date variables to avoid overlapping with channel entry date variables.
 
 **2.0.5** *(2011-05-01)*
 

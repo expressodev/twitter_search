@@ -24,7 +24,7 @@
 
 $plugin_info = array(
 	'pi_name'			=> 'Twitter Search 2',
-	'pi_version'		=> '2.0.5',
+	'pi_version'		=> '2.0.6',
 	'pi_author'			=> 'Crescendo Multimedia',
 	'pi_author_url'		=> 'http://www.crescendo.net.nz/',
 	'pi_description'	=> 'Find tweets based on search text or location',
@@ -129,10 +129,14 @@ class Twitter_search
 			$tweet['source'] = str_replace('&', '&amp;', htmlspecialchars_decode($result->source));
 
 			// php datestamps
-			$tweet['created_at'] = strtotime($result->created_at);
-			$tweet['relative_date'] = $this->EE->localize->format_timespan(time() - $tweet['created_at']);
+			$tweet['tweet_date'] = strtotime($result->created_at);
+			$tweet['relative_tweet_date'] = $this->EE->localize->format_timespan(time() - $tweet['tweet_date']);
 
-			$tweet['no_tweets'] = 0;
+			// legacy date vars
+			$tweet['created_at'] = $tweet['tweet_date'];
+			$tweet['relative_date'] = $tweet['relative_tweet_date'];
+
+			$tweet['no_tweets'] = FALSE;
 
 			$tweets[] = $tweet;
 		}
