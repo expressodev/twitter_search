@@ -1,10 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /*
- * Twitter Search 2 module by Crescendo (support@crescendo.net.nz)
+ * Twitter Search 2 module by Exp:resso (support@exp-resso.com)
  * Concept based on Twitter Search for EE 1.6 by David Rencher (http://www.lumis.com/)
  *
- * Copyright (c) 2010 Crescendo Multimedia Ltd
+ * Copyright (c) 2010-2012 Crescendo Multimedia Ltd
  * All rights reserved.
  *
  * This software is licensed under a Creative Commons Attribution-ShareAlike 3.0 License.
@@ -24,9 +24,9 @@
 
 $plugin_info = array(
 	'pi_name'			=> 'Twitter Search 2',
-	'pi_version'		=> '2.0.6',
-	'pi_author'			=> 'Crescendo Multimedia',
-	'pi_author_url'		=> 'http://www.crescendo.net.nz/',
+	'pi_version'		=> '2.0.7',
+	'pi_author'			=> 'Exp:resso',
+	'pi_author_url'		=> 'http://exp-resso.com/',
 	'pi_description'	=> 'Find tweets based on search text or location',
 	'pi_usage'			=> Twitter_search::usage()
 );
@@ -125,8 +125,8 @@ class Twitter_search
 				$tweet['text'] = str_ireplace('<a href="', '<a rel="nofollow" href="', $tweet['text']);
 			}
 
-			// source is html encoded for some reason
-			$tweet['source'] = str_replace('&', '&amp;', htmlspecialchars_decode($result->source));
+			// source is no longer being returned by the Twitter API, may still exist in templates..
+			$tweet['source'] = '';
 
 			// php datestamps
 			$tweet['tweet_date'] = strtotime($result->created_at);

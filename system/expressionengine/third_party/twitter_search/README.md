@@ -46,7 +46,6 @@ Tag Variables available
 * `{iso_language_code}`
 * `{profile_image_url}`
 * `{tweet_url}` - a permanent link to this tweet
-* `{source}` - an html link to the Twitter client used to post this tweet
 * `{tweet_date format="%D, %M %d %Y - %g:%i %a"}`
 * `{relative_tweet_date}` - the relative date expressed in words, e.g. "3 hours, 10 minutes ago"
 * `{if no_tweets}{/if}` - conditional variable, content displayed if no tweets are found
@@ -72,6 +71,10 @@ only tweets from the last 5 days or so.
 
 Changelog
 ---------
+
+**2.0.7** *(2012-01-05)*
+
+* Removed {source} variable which is no longer being returned by the Twitter API.
 
 **2.0.6** *(2011-07-23)*
 
