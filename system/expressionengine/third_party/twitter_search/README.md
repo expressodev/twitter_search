@@ -1,17 +1,28 @@
-Twitter Search 2
-================
+Twitter Search ExpressionEngine Plugin
+======================================
 
 Twitter Search 2 is a simple plugin which queries Twitter for tweets based on a search string
 you specify. You can easily find tweets sent from or to a user, or based on any query string.
 
-Concept and syntax based on original Twitter Search module for EE 1.6 by [David Rencher](http://www.lumis.com/).
+Concept and syntax are based on the original Twitter Search module for EE 1.6
+by [David Rencher](http://www.lumis.com/).
 
-Rewritten for ExpressionEngine 2.0 by [Crescendo](http://crescendo.net.nz/)
+Requirements
+------------
+
+* ExpressionEngine 2.1.3+
+* PHP 5.2+ with the JSON extension enabled
+
+Installation
+------------
+
+To install Twitter Search, simply copy the entire `twitter_search` folder to
+`/system/expressionengine/third_party` on your server.
 
 Basic Queries
 -------------
 
-	{exp:twitter_search q="query"}
+    {exp:twitter_search q="query"}
 
 Find tweets matching a specific query. Accepts pretty much anything, e.g.
 
@@ -21,6 +32,10 @@ Find tweets matching a specific query. Accepts pretty much anything, e.g.
 * `q="@CrescendoNZ #eecms"`
 * `q="from:CrescendoNZ"`
 * `q="to:CrescendoNZ"`
+ 
+For performance, you should always include the standard ExpressionEngine
+cache="yes" parameter, unless your site is in development (otherwise your
+server will make a request every single time the page loads).
 
 Optional Parameters
 -------------------
@@ -58,13 +73,13 @@ Legacy variables, still available:
 Example Usage
 -------------
 
-	{exp:twitter_search q="food" geocode="-41.291285,174.775134,10km" rpp="5" lang="en" auto_links="yes" cache="yes" refresh="5"}
-	<div class="tweet">
-		{text}<br />
-		{from_user} <a href="{tweet_url}">{relative_tweet_date}</a>
-		{if no_tweets}Nothing to display!{/if}
-	</div>
-	{/exp:twitter_search}
+    {exp:twitter_search q="food" geocode="-41.291285,174.775134,10km" rpp="5" lang="en" auto_links="yes" cache="yes" refresh="5"}
+    <div class="tweet">
+        {text}<br />
+        {from_user} <a href="{tweet_url}">{relative_tweet_date}</a>
+        {if no_tweets}Nothing to display!{/if}
+    </div>
+    {/exp:twitter_search}
 
 Please note this plugin is limited to what the Twitter search API will let you query - usually
 only tweets from the last 5 days or so.
