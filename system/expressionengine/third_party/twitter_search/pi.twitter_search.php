@@ -70,7 +70,8 @@ class Twitter_search
 		}
 
 		// check we found some tweets
-		if (count($json_data->results) == 0)
+		$total_results = count($json_data->results);
+		if ($total_results == 0)
 		{
 			$this->return_data = $this->no_tweets($this->EE->TMPL->tagdata);
 			return;
@@ -87,54 +88,60 @@ class Twitter_search
 		$this->EE->typography->text_format = "none";
 		$this->EE->typography->word_censor = $this->EE->TMPL->fetch_param('word_censor') != "no";
 
+		$prefix = $this->EE->TMPL->fetch_param('var_prefix');
+		$prefix = $prefix ? $prefix.':' : '';
+
 		// loop over tweets and build array for template
 		$tweets = array();
+		$count = 0;
 		foreach($json_data->results as $result)
 		{
-			$tweet = array(
-				'id' => $result->id_str,
-				'from_user' => $result->from_user,
-				'from_user_id' => $result->from_user_id_str,
-				'to_user_id' => $result->to_user_id_str,
-				'geo' => $result->geo,
-				'profile_image_url' => $result->profile_image_url,
-				'iso_language_code' => $result->iso_language_code,
-			);
+			$count++;
 
-			$tweet['tweet_url'] = "http://twitter.com/{$tweet['from_user']}/status/{$tweet['id']}";
+			$tweet = array();
+			$tweet[$prefix.'count'] = $count;
+			$tweet[$prefix.'total_results'] = $total_results;
+			$tweet[$prefix.'id'] = $result->id_str;
+			$tweet[$prefix.'from_user'] = $result->from_user;
+			$tweet[$prefix.'from_user_id'] = $result->from_user_id_str;
+			$tweet[$prefix.'to_user_id'] = $result->to_user_id_str;
+			$tweet[$prefix.'geo'] = $result->geo;
+			$tweet[$prefix.'profile_image_url'] = $result->profile_image_url;
+			$tweet[$prefix.'iso_language_code'] = $result->iso_language_code;
+			$tweet[$prefix.'tweet_url'] = 'http://twitter.com/'.$tweet[$prefix.'from_user'].'/status/'.$tweet[$prefix.'id'];
 
 			// run tweet text through typography class
-			$tweet['text'] = $this->EE->typography->parse_type($result->text);
+			$tweet[$prefix.'text'] = $this->EE->typography->parse_type($result->text);
 
 			// parse @usernames and #hashtags
 			if ($this->EE->TMPL->fetch_param('auto_links') != "no")
 			{
-				if (strpos($tweet['text'], '@') !== FALSE)
+				if (strpos($tweet[$prefix.'text'], '@') !== FALSE)
 				{
-					$tweet['text'] = preg_replace('/(^|[^\w])@(\w+)/', '$1@<a href="http://twitter.com/$2">$2</a>', $tweet['text']);
+					$tweet[$prefix.'text'] = preg_replace('/(^|[^\w])@(\w+)/', '$1@<a href="http://twitter.com/$2">$2</a>', $tweet[$prefix.'text']);
 				}
-				if (strpos($tweet['text'], '#') !== FALSE)
+				if (strpos($tweet[$prefix.'text'], '#') !== FALSE)
 				{
-					$tweet['text'] = preg_replace('/(^|[^\w])#(\w+)/', '$1<a href="http://twitter.com/search/%23$2">#$2</a>', $tweet['text']);
+					$tweet[$prefix.'text'] = preg_replace('/(^|[^\w])#(\w+)/', '$1<a href="http://twitter.com/search/%23$2">#$2</a>', $tweet[$prefix.'text']);
 				}
 			}
 
 			// do we need to nofollow links?
 			if ($this->EE->typography->auto_links AND $this->EE->TMPL->fetch_param('nofollow') != "no")
 			{
-				$tweet['text'] = str_ireplace('<a href="', '<a rel="nofollow" href="', $tweet['text']);
+				$tweet[$prefix.'text'] = str_ireplace('<a href="', '<a rel="nofollow" href="', $tweet[$prefix.'text']);
 			}
 
 			// source is no longer being returned by the Twitter API, may still exist in templates..
-			$tweet['source'] = '';
+			$tweet[$prefix.'source'] = '';
 
 			// php datestamps
-			$tweet['tweet_date'] = strtotime($result->created_at);
-			$tweet['relative_tweet_date'] = $this->EE->localize->format_timespan(time() - $tweet['tweet_date']);
+			$tweet[$prefix.'tweet_date'] = strtotime($result->created_at);
+			$tweet[$prefix.'relative_tweet_date'] = $this->EE->localize->format_timespan(time() - $tweet[$prefix.'tweet_date']);
 
 			// legacy date vars
-			$tweet['created_at'] = $tweet['tweet_date'];
-			$tweet['relative_date'] = $tweet['relative_tweet_date'];
+			$tweet[$prefix.'created_at'] = $tweet[$prefix.'tweet_date'];
+			$tweet[$prefix.'relative_date'] = $tweet[$prefix.'relative_tweet_date'];
 
 			$tweet['no_tweets'] = FALSE;
 

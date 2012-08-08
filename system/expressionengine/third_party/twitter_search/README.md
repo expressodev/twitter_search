@@ -33,6 +33,7 @@ Optional Parameters
 * `auto_links="no"` - don't convert URLs in the {text} into links
 * `nofollow="no"` - this disables rel="nofollow" on links
 * `word_censor="no"` - turns off the EE word censor
+* `var_prefix="tweet"` - adds a prefix to all variables (see below)
 * for advanced parameters, see [http://dev.twitter.com/doc/get/search](http://dev.twitter.com/doc/get/search)
 
 Tag Variables available
@@ -54,6 +55,15 @@ Legacy variables, still available:
 
 * `{created_at}`
 * `{relative_date}`
+
+When using the `var_prefix` parameter, all variables will be prefixed. This allows you to nest the plugin inside other
+tags which may have naming conflicts (for example, the channel entries tag).
+
+For example, when using `var_prefix="tweet"`, the following variables are available:
+
+* `{tweet:text}`
+* `{tweet:from_user}`
+* etc
 
 Example Usage
 -------------
