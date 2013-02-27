@@ -24,7 +24,7 @@
 
 $plugin_info = array(
 	'pi_name'			=> 'Twitter Search 2',
-	'pi_version'		=> '2.0.7',
+	'pi_version'		=> '2.0.8',
 	'pi_author'			=> 'Exp:resso',
 	'pi_author_url'		=> 'http://exp-resso.com/',
 	'pi_description'	=> 'Find tweets based on search text or location',
@@ -101,13 +101,13 @@ class Twitter_search
 			$tweet = array();
 			$tweet[$prefix.'count'] = $count;
 			$tweet[$prefix.'total_results'] = $total_results;
-			$tweet[$prefix.'id'] = $result->id_str;
-			$tweet[$prefix.'from_user'] = $result->from_user;
-			$tweet[$prefix.'from_user_id'] = $result->from_user_id_str;
-			$tweet[$prefix.'to_user_id'] = $result->to_user_id_str;
-			$tweet[$prefix.'geo'] = $result->geo;
-			$tweet[$prefix.'profile_image_url'] = $result->profile_image_url;
-			$tweet[$prefix.'iso_language_code'] = $result->iso_language_code;
+
+			foreach (array('id', 'from_user', 'from_user_id', 'to_user', 'to_user_id',
+				'profile_image_url', 'iso_language_code') as $key)
+			{
+				$tweet[$prefix.$key] = isset($result->$key) ? (string) $result->$key : '';
+			}
+
 			$tweet[$prefix.'tweet_url'] = 'http://twitter.com/'.$tweet[$prefix.'from_user'].'/status/'.$tweet[$prefix.'id'];
 
 			// run tweet text through typography class
@@ -155,7 +155,7 @@ class Twitter_search
 	private function query_twitter($tagparams)
 	{
 		$query_url = self::TWITTER_URL;
-		$skip_vars = array('cache', 'refresh', 'word_censor', 'auto_links');
+		$skip_vars = array('cache', 'refresh', 'word_censor', 'auto_links', 'var_prefix');
 
 		// generate query string
 		foreach ($tagparams as $key => $value)

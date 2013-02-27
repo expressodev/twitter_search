@@ -32,7 +32,7 @@ Find tweets matching a specific query. Accepts pretty much anything, e.g.
 * `q="@CrescendoNZ #eecms"`
 * `q="from:CrescendoNZ"`
 * `q="to:CrescendoNZ"`
- 
+
 For performance, you should always include the standard ExpressionEngine
 cache="yes" parameter, unless your site is in development (otherwise your
 server will make a request every single time the page loads).
@@ -54,11 +54,12 @@ Optional Parameters
 Tag Variables available
 -----------------------
 
-* `{text}`
-* `{to_user_id}`
-* `{from_user}`
 * `{id}`
+* `{text}`
+* `{from_user}`
 * `{from_user_id}`
+* `{to_user}`
+* `{to_user_id}`
 * `{iso_language_code}`
 * `{profile_image_url}`
 * `{tweet_url}` - a permanent link to this tweet
@@ -96,6 +97,10 @@ only tweets from the last 5 days or so.
 
 Changelog
 ---------
+
+**2.0.8** *(2013-02-27)*
+
+* Fixed PHP error caused by Twitter API changes.
 
 **2.0.7** *(2012-01-05)*
 
