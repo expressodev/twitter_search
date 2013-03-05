@@ -1,5 +1,12 @@
-Twitter Search ExpressionEngine Plugin
-======================================
+# Twitter Search plugin for ExpressionEngine (DEPRECATED)
+
+-----
+
+**This plugin uses the old Twitter v1 API, and will stop working in the near future!**
+
+We recommend migrating to an alternative Twitter plugin which has been updated to use the new API.
+
+-----
 
 Twitter Search 2 is a simple plugin which queries Twitter for tweets based on a search string
 you specify. You can easily find tweets sent from or to a user, or based on any query string.
